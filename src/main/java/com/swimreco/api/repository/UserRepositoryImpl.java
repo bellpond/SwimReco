@@ -3,6 +3,7 @@ package com.swimreco.api.repository;
 import static java.lang.String.format;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.WriteResult;
@@ -28,7 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         // Add a new document in collection
         ApiFuture<WriteResult> future = db.collection(collectionPath).document(user.getUserId()).set(userDoc);
-        future.get();
-        logger.info(format("Added a new user into the database. [user id = %s]", user.getUserId()));
+        Timestamp updateTime = future.get().getUpdateTime();
+        logger.info(format("Added a new user [user id = %s] into the database at %s. ", user.getUserId(), updateTime));
     }
 }
