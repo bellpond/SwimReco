@@ -22,7 +22,7 @@ public class UserRestController {
         this.service = service;
     }
 
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public String add(@RequestBody User user) {
         try {
             service.addUser(user);
