@@ -1,12 +1,11 @@
 package com.swimreco.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 
 public class SwimRecordSelector {
     private Long id;
 
-    private Long memberId;
+    private Long userId;
 
     private Integer styleId;
 
@@ -24,12 +23,12 @@ public class SwimRecordSelector {
         this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Integer getStyleId() {

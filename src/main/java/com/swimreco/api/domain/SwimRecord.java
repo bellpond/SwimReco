@@ -7,8 +7,8 @@ public class SwimRecord {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("member_id")
-    private Long memberId;
+    @JsonProperty("user_id")
+    private Long userId;
 
     @JsonProperty("style_id")
     private Integer styleId;
@@ -36,12 +36,12 @@ public class SwimRecord {
         this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Integer getStyleId() {

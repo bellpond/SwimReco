@@ -28,14 +28,14 @@ public class SwimRecordRestController {
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public SwimRecordList find(
-            @RequestParam(value = "memberId", required = false) Long memberId,
+            @RequestParam(value = "userId", required = false) Long memberId,
             @RequestParam(value = "styleId", required = false) Integer styleId,
             @RequestParam(value = "length", required = false) Integer length,
             @RequestParam(value = "poolSize", required = false) Integer poolSize,
             @RequestParam(value = "recordedAt", required = false) LocalDateTime recordedAt
             ) {
         SwimRecordSelector selector = new SwimRecordSelector();
-        selector.setMemberId(memberId);
+        selector.setUserId(memberId);
         selector.setStyleId(styleId);
         selector.setLength(length);
         selector.setPoolSize(poolSize);

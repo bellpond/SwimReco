@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -43,7 +42,7 @@ class SwimRecordRestControllerTest {
         SwimRecordList findResult = new SwimRecordList();
         ArgumentMatcher<SwimRecordSelector> matcher = argument -> {
             assertNull(argument.getId());
-            assertNull(argument.getMemberId());
+            assertNull(argument.getUserId());
             assertNull(argument.getStyleId());
             assertNull(argument.getLength());
             assertNull(argument.getPoolSize());
@@ -70,17 +69,17 @@ class SwimRecordRestControllerTest {
     @Test
     void findによる条件検索_memberId() throws Exception {
         SwimRecordSelector selector = new SwimRecordSelector();
-        selector.setMemberId(2L);
+        selector.setUserId(2L);
         SwimRecordList findResult = new SwimRecordList();
         ArgumentMatcher<SwimRecordSelector> matcher = argument -> {
-            assertEquals(2L, argument.getMemberId());
+            assertEquals(2L, argument.getUserId());
             return true;
         };
         Mockito.doReturn(findResult).when(this.service).find(Mockito.argThat(matcher));
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .get(API_CAll_PREFIX)
-                        .param("memberId", selector.getMemberId().toString()))
+                        .param("memberId", selector.getUserId().toString()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
