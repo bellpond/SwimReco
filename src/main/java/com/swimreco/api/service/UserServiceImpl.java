@@ -18,4 +18,9 @@ public class UserServiceImpl implements UserService {
     public void addUser(User user) throws Exception {
         repository.set(user, USER_COLLECTION);
     }
+
+    @Override
+    public User getUser(String userId) throws Exception {
+        return repository.get(userId, USER_COLLECTION);
+    }
 }

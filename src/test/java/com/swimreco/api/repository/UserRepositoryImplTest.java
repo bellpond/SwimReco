@@ -1,10 +1,10 @@
 package com.swimreco.api.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import com.google.cloud.firestore.DocumentReference;
-import com.swimreco.api.domain.Sex;
-import com.swimreco.api.domain.Style;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import com.swimreco.api.domain.User;
+import com.swimreco.api.util.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,20 +18,31 @@ class UserRepositoryImplTest {
     }
 
     @Test
-    void testSet() {
-        User testUser = new User();
-        testUser.setUserId("test@gmail.com");
-        testUser.setFirstName("test");
-        testUser.setLastName("user");
-        testUser.setClassYear(100);
-        testUser.setManagerFlag(false);
-        testUser.setSex(Sex.Male);
-        testUser.setS1(Style.FreeStyle);
+    void testSet() throws Exception {
+        User testUser = TestUser.create();
 
-        try {
-            target.set(testUser, "test-users");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        target.set(testUser, "test-users");
     }
+
+    @Test
+    void testGetWithSuccess() throws Exception {
+        User testUser = TestUser.create();
+        String testUserId = testUser.getUserId();
+
+        User user = target.get(testUserId, "test-users");
+
+        assertNotNull(user);
+        assertEquals(testUserId, user.getUserId());
+        assertEquals(testUser.getManagerFlag(), user.getManagerFlag());
+    }
+
+    @Test
+    void testGetWithInvalidUserId() throws Exception {
+        String userId = "abc@gmail.com";  // 存在しないuserId
+
+        User user = target.get(userId, "test-users");
+
+        assertNull(user);
+    }
+
 }
