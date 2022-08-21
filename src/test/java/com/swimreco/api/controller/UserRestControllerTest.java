@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swimreco.api.domain.User;
 import com.swimreco.api.service.UserService;
+import com.swimreco.api.util.TestUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
@@ -19,6 +20,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 class UserRestControllerTest {
+
+    private static final String API_PREFIX = "/services/v1/user";
 
     @Mock
     private UserService service;
@@ -39,16 +42,14 @@ class UserRestControllerTest {
 
     @Test
     void testAddWithSuccess() throws Exception {
-        User user = new User();
-        String userId = "test@gmail.com";
-        user.setUserId(userId);
+        User user = TestUser.create();
         ArgumentMatcher<User> matcher = argument -> {
-            assertEquals(userId, argument.getUserId());
+            assertEquals(user.getUserId(), argument.getUserId());
             return true;
         };
         Mockito.doNothing().when(service).addUser(Mockito.argThat(matcher));
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/services/v1/user")
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(API_PREFIX)
                 .content(mapper.writeValueAsString(user))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -59,11 +60,27 @@ class UserRestControllerTest {
         assertEquals("ok", result.getResult());
         Mockito.verify(service, Mockito.times(1)).addUser(Mockito.argThat(matcher));
     }
+
+    @Test
+    void testGetWithSuccess() throws Exception {
+        User user = TestUser.create();
+        Mockito.doReturn(user).when(service).getUser(user.getUserId());
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(API_PREFIX + "/" + user.getUserId()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        User result = mapper.readValue(mvcResult.getResponse().getContentAsString(), User.class);
+
+        assertEquals(user.getUserId(), result.getUserId());
+        assertEquals(user.getFirstName(), result.getFirstName());
+        assertEquals(user.getLastName(), result.getLastName());
+        Mockito.verify(service, Mockito.times(1)).getUser(user.getUserId());
+    }
 }
 
 class Response {
     private String result;
-
     public String getResult() {
         return result;
     }
